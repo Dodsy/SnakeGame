@@ -4,5 +4,3 @@ A snake clone!
 
 
 ![Alt Text](https://github.com/Dodsy/SnakeGame/blob/main/SnakeGame/gif_.gif)
-
-cd into the src folder and compile!
