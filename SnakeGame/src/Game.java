@@ -11,11 +11,12 @@ public class Game extends JFrame{
     final int RECTANGLE_HEIGHT = 10;
     final int rectangleCountX = 30;
     final int rectangleCountY = 30;
-
+    private boolean colided = false;
     private int current;
     private int vk;
     private int score = 0;
     private int high_score;
+    private int start = (rectangleCountY/2)+(rectangleCountX*rectangleCountX/2);
 
     private List<Shape> grid;
     private List<Shape> fill;
@@ -118,6 +119,9 @@ public class Game extends JFrame{
                 crums.add(grid.get(crum.get_location()));
                 snake_list.add(current);
                 score++;
+                if (score > high_score){
+                    high_score = score;
+                }
                 setTitle("High Score: "+high_score+" , Current Score: "+score);
                 repaint();
             }
@@ -126,7 +130,8 @@ public class Game extends JFrame{
     }
     public void check_collision(int current){
         if (snake_list.contains(current)){
-           collide();  
+            colided = false;
+            collide();
         }
     }
     private void collide(){
@@ -138,11 +143,11 @@ public class Game extends JFrame{
             high_score = score;
         }
         score = 0;
-        setTitle("High Score: "+high_score+" , Current Score: "+score);
         repaint();
+        play();
     }
     private void game_loop(){
-        while(true){
+        while(!colided){
             int temp_head = current;
             if(vk == 1){
                 // go right
@@ -177,8 +182,11 @@ public class Game extends JFrame{
                     current = current + 1;
                 }
             }
-            check_collision(current);
-            ppane.check_crum(current);
+            if (current != start){
+                //System.out.println("Not start");
+                check_collision(current);
+                ppane.check_crum(current);
+            }
             if (snake_list.size() > 0){
                 Collections.rotate(snake_list,1);
                 snake_list.set(0,current);
@@ -199,12 +207,13 @@ public class Game extends JFrame{
         }
     }
     public void play(){
-        int start = rectangleCountX/2*rectangleCountY/2;
+        setTitle("Dini's Snake Game");
+        vk = 0;
         current = start;
         fill.add(grid.get(start));
         crums.add(grid.get(crum.get_location()));
         repaint();
-        game_loop(); 
+        game_loop();
     }
     public static void main(String[] args) {
         Game game = new Game();
